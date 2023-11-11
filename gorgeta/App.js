@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 
 export default function App() {
 
@@ -14,104 +14,111 @@ export default function App() {
     setvalor (valor)
     setporcentagem (porcetagem)
     settotal (total)
-    console.log('v ' + valor)
-    console.log('r ' + result)
-    console.log('p ' + porcetagem)
-    console.log('t ' + total)
   })
 
   function calcular() {
     
     settotal (valor + result)
     if (valor == 0 || porcetagem == 0){
-      alert("Preencha todos os campos")}
+      alert("Digite um valor para a gorjeta e/ou para a conta")}
       else{
         setresult (valor * (porcetagem / 100))
         settotal (valor + (valor * (porcetagem / 100)))
       }
+      Keyboard.dismiss()
   }
   
   function reset() {
     if (valor == 0 || porcetagem == 0){
-      alert("Preencha todos os campos")}
+      alert("Digite um valor para a gorjeta e/ou para a conta")}
       else{
-        setvalor(0)
-        setporcentagem(0)
+        setvalor('')
+        setporcentagem('')
         setresult(0)
         settotal(0)
       }
+      Keyboard.dismiss()
   }
   
-  useEffect(() => {
-    setvalor (valor)
-    setporcentagem (porcetagem)
-  })
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
-      <Text style={{bottom: 100, fontWeight: 'bold', fontSize: 60}}>GORJETA</Text>
+      <Text style={styles.text}>GORJETA</Text>
+      <Image style={styles.img} source={require('./assets/din.png')}/>
       <TextInput
-      placeholder='VALOR'
+      placeholder='VALOR (R$)'
       value = {valor}
       onChangeText={(Valor) => setvalor(Number(Valor))}
       keyboardType='numeric'
       style={styles.textinput}/>
 
       <TextInput
-      placeholder='PORCETAGEM'
+      placeholder='PORCETAGEM (%)'
       value= {porcetagem}
       onChangeText={(Porcetagem) => setporcentagem(Number(Porcetagem))}
       keyboardType='numeric'
       style={styles.textinput}/>
+      
 
       <TouchableOpacity style={styles.calc} onPress={calcular}>
         <Text>CALCULAR GORJETA</Text>
       </TouchableOpacity>
+      
       <TouchableOpacity style={styles.calc} onPress={reset}>
         <Text>CALCULAR NOVAMENTE</Text>
       </TouchableOpacity>
 
-      <Text style={styles.result}>Valor da gorjeta</Text>
-      <Text style={styles.result}>{result}</Text>
-      <Text style={styles.total}>Valor da do total</Text>
-      <Text style={styles.total}>{total}</Text>
+      <Text style={styles.result}>Valor da gorjeta: R${result}</Text>
+      <Text style={styles.total}>Valor da do total: R${total}</Text>
+
 
       <StatusBar/>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#4bae4d',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text: { 
+    fontWeight: 'bold', 
+    fontSize: 60
+  },
+  img: {
+    width:250,
+    height:250
+  },
   textinput: {
-    width: 250,
+    width: 350,
     height: 50,
     borderRadius: 15,
     borderWidth: 5,
     textAlign: 'center',
     fontSize: 30,
-    marginBottom: 20
+    marginBottom: 20,
+    backgroundColor: '#c8e986',
+    fontWeight: 'bold'
   },
   calc: {
-    marginTop: 40,
+    marginTop: 10,
     borderWidth: 5,
     borderRadius: 30,
     padding: 10,
+    backgroundColor: '#c8e986'
   },
   result: {
-    fontSize: 50,
-    top: 50,
+    fontSize: 30,
+    top: 30,
     fontWeight: 'bold',
   },
   total: {
-    fontSize: 50,
-    top: 90,
+    fontSize: 30,
+    top: 50,
     fontWeight: 'bold',
   },
 });
